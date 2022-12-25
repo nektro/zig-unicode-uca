@@ -1,5 +1,3 @@
-const std = @import("std");
-
 pub const allkeys = @import("./allkeys.zig").allkeys;
 pub const decomps = @import("./decomps.zig").decomps;
 
