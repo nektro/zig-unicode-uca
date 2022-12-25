@@ -80,16 +80,13 @@ pub fn main() !void {
             }
             break :blk res.toOwnedSlice();
         };
-        const name = blk: {
-            break :blk line[std.mem.indexOf(u8, line, "#").? + 2 .. line.len];
-        };
         const element = uca.CollationElement{
             .codepoints = codes,
             .weights = weights,
         };
         try w.print("    ", .{});
         try fmtValueLiteral(w, element, false);
-        try w.print(", // {s}\n", .{name});
+        try w.print(",\n", .{});
 
         std.debug.print("{s}", .{comptime csi.CursorUp(1)});
         std.debug.print("{s}", .{comptime csi.EraseInLine(0)});
@@ -146,7 +143,6 @@ pub fn main() !void {
                 break :blk null;
             }
         };
-        var name: []const u8 = undefined;
         const decomp = blk: {
             var res = std.ArrayList(u21).init(alloc);
             errdefer res.deinit();
@@ -154,7 +150,6 @@ pub fn main() !void {
             var it2 = std.mem.split(u8, s, " ");
             while (it2.next()) |item| {
                 if (item[0] == '#') {
-                    name = it2.rest();
                     break;
                 }
                 try res.append(try std.fmt.parseUnsigned(u21, item, 16));
@@ -168,7 +163,7 @@ pub fn main() !void {
         };
         try w2.print("    ", .{});
         try fmtValueLiteral(w2, element, false);
-        try w2.print(", // {s}\n", .{name});
+        try w2.print(",\n", .{});
     }
     try w2.writeAll("};\n");
     var sit = set.iterator();
