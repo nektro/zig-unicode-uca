@@ -6,7 +6,7 @@ const csi = @import("ansi").csi;
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const alloc = &gpa.allocator;
+    const alloc = gpa.allocator();
     const max_size = std.math.maxInt(usize);
 
     //
@@ -42,10 +42,10 @@ pub fn main() !void {
             continue;
         }
         const codes = blk: {
-            const res = &std.ArrayList(u21).init(alloc);
-            defer res.deinit();
+            var res = std.ArrayList(u21).init(alloc);
+            errdefer res.deinit();
             const read = line[0..std.mem.indexOf(u8, line, ";").?];
-            var it = std.mem.split(read, " ");
+            var it = std.mem.split(u8, read, " ");
             while (it.next()) |item| {
                 if (item.len == 0) continue;
                 try res.append(try std.fmt.parseUnsigned(u21, item, 16));
@@ -53,14 +53,14 @@ pub fn main() !void {
             break :blk res.toOwnedSlice();
         };
         const weights = blk: {
-            const res = &std.ArrayList(uca.CollationElement.Weight).init(alloc);
-            defer res.deinit();
+            var res = std.ArrayList(uca.CollationElement.Weight).init(alloc);
+            errdefer res.deinit();
             const read = line[std.mem.indexOf(u8, line, ";").? + 2 .. std.mem.indexOf(u8, line, "#").? - 1];
-            var it = std.mem.split(read, "[");
+            var it = std.mem.split(u8, read, "[");
             _ = it.next().?;
             while (it.next()) |item| {
                 const first = item[0];
-                var it2 = std.mem.split(item[1 .. item.len - 1], ".");
+                var it2 = std.mem.split(u8, item[1 .. item.len - 1], ".");
                 const a = try std.fmt.parseUnsigned(u16, it2.next().?, 16);
                 const b = try std.fmt.parseUnsigned(u16, it2.next().?, 16);
                 const c = try std.fmt.parseUnsigned(u16, it2.next().?, 16);
@@ -119,7 +119,7 @@ pub fn main() !void {
     try req2.do(.GET, null, null);
     const r2 = req2.reader();
 
-    const set = &std.BufSet.init(alloc);
+    var set = std.BufSet.init(alloc);
     while (true) {
         const line = r2.readUntilDelimiterAlloc(alloc, '\n', max_size) catch |e| if (e == error.EndOfStream) break else return e;
         if (line.len == 0) {
@@ -128,7 +128,7 @@ pub fn main() !void {
         if (line[0] == '#') {
             continue;
         }
-        var it = std.mem.split(line, ";");
+        var it = std.mem.split(u8, line, ";");
         const point = try std.fmt.parseUnsigned(u21, it.next().?, 16);
         const tag = blk: {
             const s = it.next().?;
@@ -140,15 +140,16 @@ pub fn main() !void {
             if (e) |_| {
                 break :blk e.?;
             } else {
-                try set.put(k);
+                try set.insert(k);
                 break :blk null;
             }
         };
         var name: []const u8 = undefined;
         const decomp = blk: {
-            const res = &std.ArrayList(u21).init(alloc);
+            var res = std.ArrayList(u21).init(alloc);
+            errdefer res.deinit();
             const s = it.next().?;
-            var it2 = std.mem.split(s, " ");
+            var it2 = std.mem.split(u8, s, " ");
             while (it2.next()) |item| {
                 if (item[0] == '#') {
                     name = it2.rest();
@@ -169,8 +170,8 @@ pub fn main() !void {
     }
     try w2.writeAll("};\n");
     var sit = set.iterator();
-    while (sit.next()) |entry| {
-        std.debug.print("{s},\n", .{entry.key});
+    while (sit.next()) |key| {
+        std.debug.print("{s},\n", .{key.*});
     }
     std.log.info("decomps done", .{});
 }
