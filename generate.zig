@@ -26,7 +26,7 @@ pub fn main() !void {
         \\
     );
 
-    const req = try zfetch.Request.init(alloc, "https://www.unicode.org/Public/UCA/latest/allkeys.txt", null);
+    const req = try zfetch.Request.init(alloc, "https://www.unicode.org/Public/UCA/13.0.0/allkeys.txt", null);
     defer req.deinit();
     try req.do(.GET, null, null);
     const r = req.reader();
@@ -114,7 +114,7 @@ pub fn main() !void {
         \\
     );
 
-    const req2 = try zfetch.Request.init(alloc, "https://www.unicode.org/Public/UCA/latest/decomps.txt", null);
+    const req2 = try zfetch.Request.init(alloc, "https://www.unicode.org/Public/UCA/13.0.0/decomps.txt", null);
     defer req2.deinit();
     try req2.do(.GET, null, null);
     const r2 = req2.reader();
