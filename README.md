@@ -1,6 +1,8 @@
 # zig-unicode-uca
 
-Zig bindings for the contributory data files for the Unicode Collation Algorithm.
+Zig bindings for the Unicode Collation Algorithm
+
+Last updated as of Unicode 13.0.0
 
 https://www.unicode.org/reports/tr10/
 
