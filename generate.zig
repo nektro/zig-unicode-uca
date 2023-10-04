@@ -4,7 +4,7 @@ const uca = @import("src/types.zig");
 const fmtValueLiteral = @import("fmt-valueliteral").fmtValueLiteral;
 const csi = @import("ansi").csi;
 
-const version = "13.0.0";
+const version = "14.0.0";
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
