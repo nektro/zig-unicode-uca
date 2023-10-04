@@ -52,7 +52,7 @@ pub fn main() !void {
                 if (item.len == 0) continue;
                 try res.append(try std.fmt.parseUnsigned(u21, item, 16));
             }
-            break :blk res.toOwnedSlice();
+            break :blk try res.toOwnedSlice();
         };
         const weights = blk: {
             var res = std.ArrayList(uca.CollationElement.Weight).init(alloc);
@@ -78,7 +78,7 @@ pub fn main() !void {
                 };
                 try res.append(wght);
             }
-            break :blk res.toOwnedSlice();
+            break :blk try res.toOwnedSlice();
         };
         const element = uca.CollationElement{
             .codepoints = codes,
@@ -154,7 +154,7 @@ pub fn main() !void {
                 }
                 try res.append(try std.fmt.parseUnsigned(u21, item, 16));
             }
-            break :blk res.toOwnedSlice();
+            break :blk try res.toOwnedSlice();
         };
         const element = uca.Decomposition{
             .codepoint = point,
