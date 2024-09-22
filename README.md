@@ -2,7 +2,7 @@
 
 Zig bindings for the Unicode Collation Algorithm
 
-Last updated as of Unicode 15.1.0
+Last updated as of Unicode 16.0.0
 
 https://www.unicode.org/reports/tr10/
 
