@@ -1,5 +1,11 @@
 # zig-unicode-uca
 
+![loc](https://sloc.xyz/github/nektro/zig-unicode-uca)
+[![license](https://img.shields.io/github/license/nektro/zig-unicode-uca.svg)](https://github.com/nektro/zig-unicode-uca/blob/master/LICENSE)
+[![nektro @ github sponsors](https://img.shields.io/badge/sponsors-nektro-purple?logo=github)](https://github.com/sponsors/nektro)
+[![Zig](https://img.shields.io/badge/Zig-0.14-f7a41d)](https://ziglang.org/)
+[![Zigmod](https://img.shields.io/badge/Zigmod-latest-f7a41d)](https://github.com/nektro/zigmod)
+
 Zig bindings for the Unicode Collation Algorithm
 
 Last updated as of Unicode 16.0.0
@@ -10,13 +16,12 @@ https://www.unicode.org/reports/tr10/
 
 https://www.unicode.org/Public/UCA/latest/
 
-## Installation
-```
-zigmod aq add 1/nektro/unicode-uca
-```
-
 ## Usage
+
 This package provides `.allkeys` and `.decomps` namespaces.
 
 ## License
-MIT
+
+Code here is MIT
+
+Source data files are https://www.unicode.org/license.html
