@@ -47,7 +47,7 @@ pub fn main() !void {
             var res = std.ArrayList(u21).init(alloc);
             errdefer res.deinit();
             const read = line[0..std.mem.indexOf(u8, line, ";").?];
-            var it = std.mem.split(u8, read, " ");
+            var it = std.mem.splitScalar(u8, read, ' ');
             while (it.next()) |item| {
                 if (item.len == 0) continue;
                 try res.append(try std.fmt.parseUnsigned(u21, item, 16));
@@ -58,11 +58,11 @@ pub fn main() !void {
             var res = std.ArrayList(uca.CollationElement.Weight).init(alloc);
             errdefer res.deinit();
             const read = line[std.mem.indexOf(u8, line, ";").? + 2 .. std.mem.indexOf(u8, line, "#").? - 1];
-            var it = std.mem.split(u8, read, "[");
+            var it = std.mem.splitScalar(u8, read, '[');
             _ = it.next().?;
             while (it.next()) |item| {
                 const first = item[0];
-                var it2 = std.mem.split(u8, item[1 .. item.len - 1], ".");
+                var it2 = std.mem.splitScalar(u8, item[1 .. item.len - 1], '.');
                 const a = try std.fmt.parseUnsigned(u16, it2.next().?, 16);
                 const b = try std.fmt.parseUnsigned(u16, it2.next().?, 16);
                 const c = try std.fmt.parseUnsigned(u16, it2.next().?, 16);
@@ -127,7 +127,7 @@ pub fn main() !void {
         if (line[0] == '#') {
             continue;
         }
-        var it = std.mem.split(u8, line, ";");
+        var it = std.mem.splitScalar(u8, line, ';');
         const point = try std.fmt.parseUnsigned(u21, it.next().?, 16);
         const tag = blk: {
             const s = it.next().?;
@@ -147,7 +147,7 @@ pub fn main() !void {
             var res = std.ArrayList(u21).init(alloc);
             errdefer res.deinit();
             const s = it.next().?;
-            var it2 = std.mem.split(u8, s, " ");
+            var it2 = std.mem.splitScalar(u8, s, ' ');
             while (it2.next()) |item| {
                 if (item[0] == '#') {
                     break;
