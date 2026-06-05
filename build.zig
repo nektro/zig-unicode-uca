@@ -6,14 +6,8 @@ pub fn build(b: *std.Build) void {
     const mode = b.option(std.builtin.OptimizeMode, "mode", "") orelse .Debug;
     const disable_llvm = b.option(bool, "disable_llvm", "use the non-llvm zig codegen") orelse false;
 
-    const step = b.option([]const u8, "step", "") orelse "run";
-
-    if (std.mem.eql(u8, step, "run")) {
-        addExeStep(b, target, mode, "zig-unicode-uca", "src/main.zig", "Run the app");
-    }
-    if (std.mem.eql(u8, step, "generate")) {
-        addExeStep(b, target, mode, "generate", "generate.zig", "Generate the bindings");
-    }
+    addExeStep(b, target, mode, "run", "zig-unicode-uca", "src/main.zig", "Run the app");
+    addExeStep(b, target, mode, "generate", "generate", "generate.zig", "Generate the bindings");
 
     const tests = b.addTest(.{
         .root_module = b.createModule(.{
@@ -34,7 +28,7 @@ pub fn build(b: *std.Build) void {
     test_step.dependOn(&tests_run.step);
 }
 
-fn addExeStep(b: *std.Build, target: std.Build.ResolvedTarget, mode: std.builtin.OptimizeMode, name: []const u8, root_src: []const u8, sdescription: []const u8) void {
+fn addExeStep(b: *std.Build, target: std.Build.ResolvedTarget, mode: std.builtin.OptimizeMode, step_name: []const u8, name: []const u8, root_src: []const u8, sdescription: []const u8) void {
     const exe = b.addExecutable(.{
         .name = name,
         .root_module = b.createModule(.{
@@ -44,6 +38,7 @@ fn addExeStep(b: *std.Build, target: std.Build.ResolvedTarget, mode: std.builtin
         }),
     });
     deps.addAllTo(exe);
+    exe.root_module.link_libc = true;
     b.installArtifact(exe);
 
     const cmd = b.addRunArtifact(exe);
@@ -52,6 +47,6 @@ fn addExeStep(b: *std.Build, target: std.Build.ResolvedTarget, mode: std.builtin
         cmd.addArgs(args);
     }
 
-    const step = b.step("run", sdescription);
+    const step = b.step(step_name, sdescription);
     step.dependOn(&cmd.step);
 }
