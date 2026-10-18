@@ -86,7 +86,7 @@ pub fn main() !void {
                 }
                 const wght = blk2: {
                     if (first == '*') break :blk2 uca.CollationElement.Weight{ .Variable = .{ a, b, c } };
-                    if (c == 0) break :blk2 uca.CollationElement.Weight{ .Ignorable = void{} };
+                    if (c == 0) break :blk2 uca.CollationElement.Weight{ .Ignorable = {} };
                     if (b == 0) break :blk2 uca.CollationElement.Weight{ .Tertiary = .{c} };
                     if (a == 0) break :blk2 uca.CollationElement.Weight{ .Secondary = .{ b, c } };
                     break :blk2 uca.CollationElement.Weight{ .Primary = .{ a, b, c } };
