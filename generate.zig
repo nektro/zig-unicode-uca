@@ -5,7 +5,7 @@ const csi = @import("ansi").csi;
 const nfs = @import("nfs");
 const extras = @import("extras");
 
-const version = "17.0.0";
+const version = "18.0.0";
 
 pub fn main() !void {
     var gpa = std.heap.DebugAllocator(.{}){};
@@ -72,7 +72,7 @@ pub fn main() !void {
         const weights = blk: {
             var res = std.array_list.Managed(uca.CollationElement.Weight).init(alloc);
             errdefer res.deinit();
-            const read = line[std.mem.indexOf(u8, line, ";").? + 2 .. std.mem.indexOf(u8, line, "#").? - 1];
+            const read = line[std.mem.indexOf(u8, line, ";").? + 2 .. if (std.mem.indexOf(u8, line, "#")) |i| i - 1 else line.len];
             var it = std.mem.splitScalar(u8, read, '[');
             _ = it.next().?;
             while (it.next()) |item| {
